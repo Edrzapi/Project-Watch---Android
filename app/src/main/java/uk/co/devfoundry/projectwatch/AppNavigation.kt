@@ -17,12 +17,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import uk.co.devfoundry.projectwatch.page.LoginView
+import uk.co.devfoundry.projectwatch.page.MapView
 
 
 @Composable
 fun AppNav(navController: NavHostController) {
-    NavHost(navController, startDestination = Routes.HOME) {
+    NavHost(navController, startDestination = Routes.LOGIN) {
         composable(Routes.HOME) { HomeView(navController) }
+        composable(Routes.LOGIN) { LoginView(navController) }
+        composable(Routes.MAP) { MapView(navController) }
     }
 }
 
@@ -30,6 +34,7 @@ fun AppNav(navController: NavHostController) {
 object Routes {
     const val HOME = "Home"
     const val MAP = "Map"
+    const val LOGIN = "Login"
 
 }
 
