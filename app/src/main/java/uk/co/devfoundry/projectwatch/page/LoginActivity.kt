@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import uk.co.devfoundry.projectwatch.R
+import uk.co.devfoundry.projectwatch.page.ui.CustomTextField
 import uk.co.devfoundry.projectwatch.ui.theme.ProjectWatchTheme
 
 class LoginActivity : ComponentActivity() {
@@ -34,6 +35,7 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
 fun LoginView(navController: NavController? = null) {
     var username by remember { mutableStateOf("") }
@@ -49,6 +51,7 @@ fun LoginView(navController: NavController? = null) {
     val textStyle = MaterialTheme.typography.bodyMedium
     val padding = 16.dp
     val largePadding = 40.dp
+    val fieldHeight = 56.dp // Set a consistent height for both the input and the button
 
     Box(
         modifier = Modifier
@@ -79,14 +82,16 @@ fun LoginView(navController: NavController? = null) {
                 CustomTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = "Username"
+                    label = "Username",
+                    modifier = Modifier.height(fieldHeight) // Apply fieldHeight here
                 )
 
                 CustomTextField(
                     value = password,
                     onValueChange = { password = it },
                     label = "Password",
-                    isPassword = true
+                    isPassword = true,
+                    modifier = Modifier.height(fieldHeight) // Apply fieldHeight here
                 )
             }
 
@@ -127,7 +132,7 @@ fun LoginView(navController: NavController? = null) {
                     shape = buttonShape,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(fieldHeight) // Apply fieldHeight here
                 ) {
                     Text("Submit")
                 }
@@ -145,7 +150,7 @@ fun LoginView(navController: NavController? = null) {
                     shape = buttonShape,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(48.dp)
+                        .height(fieldHeight)
                 ) {
                     Text("Forgot your password?")
                 }
@@ -160,37 +165,6 @@ fun LoginView(navController: NavController? = null) {
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CustomTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    label: String,
-    isPassword: Boolean = false
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        keyboardOptions = if (isPassword) KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password) else KeyboardOptions.Default,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                color = Color(0xFFF2F2F7), // iOS-like light gray
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(horizontal = 8.dp, vertical = 4.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            containerColor = Color.Transparent, // Remove border background
-            focusedBorderColor = Color.Transparent, // No border on focus
-            unfocusedBorderColor = Color.Transparent, // No border when unfocused
-            cursorColor = Color(0xFF007AFF) // iOS Blue Cursor
-        )
-    )
 }
 
 @Preview(showBackground = true)
