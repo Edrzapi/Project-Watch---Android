@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Project Watch</string>
+    <string name="title_activity_map_view">MapView</string>
+</resources>
