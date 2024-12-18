@@ -5,19 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -51,7 +45,7 @@ fun LoginView(navController: NavController? = null) {
     val textStyle = MaterialTheme.typography.bodyMedium
     val padding = 16.dp
     val largePadding = 40.dp
-    val fieldHeight = 56.dp // Set a consistent height for both the input and the button
+    val fieldHeight = 60.dp // Set a consistent height for both the input and the button
 
     Box(
         modifier = Modifier
@@ -82,16 +76,15 @@ fun LoginView(navController: NavController? = null) {
                 CustomTextField(
                     value = username,
                     onValueChange = { username = it },
-                    label = "Username",
-                    modifier = Modifier.height(fieldHeight) // Apply fieldHeight here
+                    hint = "Username",
+                    modifier = Modifier.height(fieldHeight) 
                 )
-
                 CustomTextField(
                     value = password,
                     onValueChange = { password = it },
-                    label = "Password",
+                    hint = "Password",
                     isPassword = true,
-                    modifier = Modifier.height(fieldHeight) // Apply fieldHeight here
+                    modifier = Modifier.height(fieldHeight) 
                 )
             }
 
@@ -132,7 +125,7 @@ fun LoginView(navController: NavController? = null) {
                     shape = buttonShape,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(fieldHeight) // Apply fieldHeight here
+                        .height(fieldHeight)
                 ) {
                     Text("Submit")
                 }

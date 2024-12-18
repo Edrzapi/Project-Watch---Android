@@ -22,29 +22,28 @@ import androidx.compose.ui.unit.dp
 fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
-    label: String,
+    hint: String,
     isPassword: Boolean = false,
-    modifier: Modifier = Modifier // Add a modifier parameter with a default value
+    modifier: Modifier = Modifier
 ) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = {
-            Text(label) },
+        placeholder = { Text(hint) },  // Use placeholder instead of label
         singleLine = true,
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         keyboardOptions = if (isPassword) KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password) else KeyboardOptions.Default,
-        modifier = modifier // Apply the passed modifier here
+        modifier = modifier
             .background(
-                color = Color(0xFFF2F2F7), // iOS-like light gray
+                color = Color(0xFFF2F2F7),
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 8.dp, vertical = 4.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            containerColor = Color.Transparent, // Remove border background
-            focusedBorderColor = Color.Transparent, // No border on focus
-            unfocusedBorderColor = Color.Transparent, // No border when unfocused
-            cursorColor = Color(0xFF007AFF) // iOS Blue Cursor
+            containerColor = Color.Transparent,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            cursorColor = Color(0xFF007AFF)
         )
     )
 }
