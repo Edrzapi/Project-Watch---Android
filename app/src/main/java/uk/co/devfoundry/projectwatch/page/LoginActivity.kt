@@ -14,10 +14,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import uk.co.devfoundry.projectwatch.R
 import uk.co.devfoundry.projectwatch.page.ui.CustomTextField
+import uk.co.devfoundry.projectwatch.page.ui.OutlinedPrimaryButton
+import uk.co.devfoundry.projectwatch.page.ui.PrimaryButton
 import uk.co.devfoundry.projectwatch.ui.theme.ProjectWatchTheme
+import uk.co.devfoundry.projectwatch.viewmodel.LoginEvent
+import uk.co.devfoundry.projectwatch.viewmodel.LoginViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,13 +34,20 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
-fun LoginView(navController: NavController? = null) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
+fun LoginView(navController: NavController? = null, viewModel: LoginViewModel = viewModel()) {
+    val state by viewModel.state.collectAsState()
+
+    // Observe the navigation event
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                LoginEvent.NavigateToHome -> {
+                    navController?.navigate("home")  // Replace with actual destination
+                }
+            }
+        }
+    }
 
     // Accessing theme values
     val primaryColor = MaterialTheme.colorScheme.primary
@@ -45,7 +57,7 @@ fun LoginView(navController: NavController? = null) {
     val textStyle = MaterialTheme.typography.bodyMedium
     val padding = 16.dp
     val largePadding = 40.dp
-    val fieldHeight = 60.dp // Set a consistent height for both the input and the button
+    val fieldHeight = 60.dp
 
     Box(
         modifier = Modifier
@@ -74,22 +86,22 @@ fun LoginView(navController: NavController? = null) {
                 modifier = Modifier.padding(horizontal = largePadding)
             ) {
                 CustomTextField(
-                    value = username,
-                    onValueChange = { username = it },
+                    value = state.username,
+                    onValueChange = { viewModel.onUsernameChange(it) },
                     hint = "Username",
-                    modifier = Modifier.height(fieldHeight) 
+                    modifier = Modifier.height(fieldHeight)
                 )
                 CustomTextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = state.password,
+                    onValueChange = { viewModel.onPasswordChange(it) },
                     hint = "Password",
                     isPassword = true,
-                    modifier = Modifier.height(fieldHeight) 
+                    modifier = Modifier.height(fieldHeight)
                 )
             }
 
             // Error Message
-            errorMessage?.let {
+            state.errorMessage?.let {
                 Text(
                     text = it,
                     color = Color.Red,
@@ -107,50 +119,26 @@ fun LoginView(navController: NavController? = null) {
                     .padding(horizontal = largePadding),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Submit Button
-                Button(
-                    onClick = {
-                        if (username.isBlank() || password.isBlank()) {
-                            errorMessage = "Please fill in all fields"
-                        } else {
-                            isLoading = true
-                            // Simulate login action
-                            isLoading = false
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = primaryColor,
-                        contentColor = onPrimaryColor
-                    ),
-                    shape = buttonShape,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(fieldHeight)
-                ) {
-                    Text("Submit")
-                }
+                // Submit Button using the reusable utility function
 
-                // Forgot Password Button (Outlined)
-                OutlinedButton(
+                PrimaryButton(
+                    onClick = { viewModel.onLoginClicked() },
+                    text = "Submit",
+                    modifier = Modifier.height(fieldHeight)
+                )
+
+                // Forgot Password Button (Outlined) using the reusable utility function
+                OutlinedPrimaryButton(
                     onClick = {
                         navController?.navigate("forgotPassword")
                     },
-                    border = BorderStroke(1.dp, primaryColor),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = primaryColor
-                    ),
-                    shape = buttonShape,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(fieldHeight)
-                ) {
-                    Text("Forgot your password?")
-                }
+                    text = "Forgot your password?",
+                    modifier = Modifier.height(fieldHeight)
+                )
             }
 
             // Loading Spinner
-            if (isLoading) {
+            if (state.isLoading) {
                 CircularProgressIndicator(
                     color = primaryColor,
                     modifier = Modifier.padding(top = 20.dp)
@@ -159,6 +147,7 @@ fun LoginView(navController: NavController? = null) {
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

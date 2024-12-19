@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 }
-
 android {
     namespace = "uk.co.devfoundry.projectwatch"
     compileSdk = 35
@@ -15,7 +14,20 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Define BuildConfig and resource value
+        buildConfigField(
+            "String",
+            "GOOGLE_MAPS_API_KEY",
+            "\"${project.findProperty("google_maps_api_key")}\""
+        )
+        resValue(
+            "string",
+            "google_maps_api_key",
+            project.findProperty("google_maps_api_key")?.toString() ?: ""
+        )
+
+        // Set manifest placeholder
+        manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = project.findProperty("google_maps_api_key")?.toString() ?: ""
     }
 
     buildTypes {
@@ -27,6 +39,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -36,10 +49,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(libs.androidx.material.icons.extended)
+    implementation("com.google.maps.android:maps-compose:2.11.2")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
     implementation("androidx.navigation:navigation-compose:2.8.4")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -50,6 +67,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

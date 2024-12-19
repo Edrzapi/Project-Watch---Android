@@ -37,7 +37,7 @@ fun ForgotView(navController: NavController? = null) {
     val textStyle = MaterialTheme.typography.bodyMedium
     val padding = 16.dp
     val largePadding = 40.dp
-    val fieldHeight = 60.dp // Set a consistent height for both the input and the button
+    val fieldHeight = 60.dp
 
     Box(
         modifier = Modifier

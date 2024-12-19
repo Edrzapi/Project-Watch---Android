@@ -1,8 +1,10 @@
 package uk.co.devfoundry.projectwatch
 
+import MapView
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,7 +20,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import uk.co.devfoundry.projectwatch.page.LoginView
-import uk.co.devfoundry.projectwatch.page.MapView
 
 
 @Composable
@@ -30,14 +31,11 @@ fun AppNav(navController: NavHostController) {
     }
 }
 
-
 object Routes {
     const val HOME = "Home"
     const val MAP = "Map"
     const val LOGIN = "Login"
-
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +49,8 @@ fun NavigationTopBar(navController: NavController? = null) {
             }
             DropdownMenu(
                 expanded = expanded.value,
-                onDismissRequest = { expanded.value = false }) {
+                onDismissRequest = { expanded.value = false }
+            ) {
                 DropdownMenuItem(
                     text = { Text("Home") },
                     leadingIcon = {
@@ -60,10 +59,19 @@ fun NavigationTopBar(navController: NavController? = null) {
                     onClick = {
                         navController?.navigate(Routes.HOME)
                         expanded.value = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text("Map") },
+                    leadingIcon = {
+                        Icon(Icons.Filled.Map, contentDescription = "Map")
                     },
+                    onClick = {
+                        navController?.navigate(Routes.MAP)
+                        expanded.value = false
+                    }
                 )
             }
         }
     )
 }
-
